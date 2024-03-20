@@ -1,0 +1,15 @@
+#log {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+}
+
+#logowanie {
+  gap: 10px;
+  border: solid black 3px;
+  border-radius: 5px;
+  padding: 10px;
+  justify-content: center;
+}

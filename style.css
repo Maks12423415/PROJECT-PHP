@@ -1,0 +1,16 @@
+/*index.html*/
+#logo {
+  width: 250px;
+  height: 200;
+}
+
+body {
+  margin: 0px;
+}
+
+#baner {
+  display: flex;
+  gap: 10px;
+  border-bottom: solid green 3px;
+}
+/*kursy.php*/
