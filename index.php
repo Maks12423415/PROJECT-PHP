@@ -1,5 +1,8 @@
 <?php
 session_start();
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,6 +20,12 @@ session_start();
 
     <img id="logo" src="logo.png" alt="LANMAX">
 
+
+
+
+
+    
+
 <?php
 //baner do wybierania podstron oraz znacznik konta uzytkownika
 
@@ -26,11 +35,7 @@ include 'menu.php';
 </div>
     
 <div id="języki">
-    <?php
-    //skrypt do generowania kursów językowych
-
-
-    ?>
+    
 </div>
 
 <div id="stopka"> </div>

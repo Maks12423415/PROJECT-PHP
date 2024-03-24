@@ -1,7 +1,7 @@
 /*index.html*/
 #logo {
   width: 250px;
-  height: 200;
+  height: 15vh;
 }
 
 body {
@@ -10,7 +10,14 @@ body {
 
 #baner {
   display: flex;
-  gap: 10px;
+  gap: 300px;
   border-bottom: solid green 3px;
+  background-color: green;
+  align-items: center;
 }
 /*kursy.php*/
+
+#języki {
+  background-color: rgb(36, 184, 36);
+  height: 85vh;
+}

@@ -15,8 +15,8 @@ if(isset($_POST["login"]) && isset($_POST["password"])){
     $haslo = szyfruj_haslo($pass);
 
 
-    $server = "192.168.15.151";
-    $dbpass = "zaq12wsx";
+    $server = "localhost";
+    $dbpass = "";
     $dbuser = "root";
     $db = "szkola";
 
@@ -44,6 +44,8 @@ if(isset($_POST["login"]) && isset($_POST["password"])){
         $_SESSION['upr']=$row['upr'];
 
         header('Location: ./index.php') ;
+
+        $_SESSION["komunikat"]="";
         
     } else {
         $_SESSION['zalogowano']=false;
@@ -76,19 +78,19 @@ if(isset($_POST["login"]) && isset($_POST["password"])){
 <div id="logowanie">
    <h1>Zaloguj się</h1>
 
-    <form action="" method="post">
+    <form action="" method="post" >
         <input type="text" placeholder="Wprowadź login..." name="login"><br>
         <input type="text" placeholder="Wprowadź hasło..." name="password"><br>
-        <input type="submit">
+        <input type="submit" value="Zaloguj">
     </form>
-    <?php
-    echo $_SESSION['komunikat'];
-    ?>
+    <div class="error-message"><?php if(isset($_SESSION['komunikat'])){ echo $_SESSION['komunikat']; }; ?></div>
 </div>
 
-
-
-
+<div id="rej-container">
+   <div id="rej">
+      <h1>Jeżeli nie posiadasz jeszcze konta <a href="Rejestracja.php">zarejestruj się</a></h1>
+   </div>
+</div>
 
 
 
