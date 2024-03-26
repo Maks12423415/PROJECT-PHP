@@ -19,7 +19,6 @@ body {
 
 #języki {
   height: 85vh;
-  background-color: rgb(71, 65, 65);
 }
 
 .divy {
@@ -45,6 +44,15 @@ a {
   color: white;
 }
 
-#tabela {
-  border: solid black 2pxs;
+table,
+th,
+td {
+  border: 1px solid black;
+}
+
+#dane {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80.35vh;
 }
