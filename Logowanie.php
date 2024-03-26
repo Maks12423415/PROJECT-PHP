@@ -36,6 +36,8 @@ if(isset($_POST["login"]) && isset($_POST["password"])){
     if(mysqli_num_rows($result)>0){
         //zalogowano
         $_SESSION['zalogowano']=true;
+
+        $_SESSION['login']=$login;
         
         $row = mysqli_fetch_assoc($result);
 

@@ -1,5 +1,8 @@
 <?php
 session_start();
+
+$login = $_SESSION['login'];
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,6 +27,43 @@ include 'menu.php';
 ?>
 </div>
 
+<div id="kursy">
+
+<?php
+
+$server = "localhost";
+$dbpass = "";
+$dbuser = "root";
+$db = "szkola";
+
+
+$conn = mysqli_connect($server, $dbuser, $dbpass, $db);
+
+
+if(!$conn){
+     mysqli_connect_error($conn);
+}
+
+
+$sql = "SELECT * FROM `kursy`, users, rodzaje WHERE users.login=kursy.login AND kursy.tytuł=rodzaje.ID";
+$result = mysqli_query($conn, $sql);
+
+if(mysqli_num_rows($result) > 0){
+    while($row = mysqli_fetch_assoc($result)){
+        if($login == $row['login']){
+            echo "<div class='divy'><h1>{$row['tytul_kursy']}</h1></div>";
+        }
+    }
+}
+
+
+
+mysqli_close($conn);
+?>
+
+
+
+</div>
 
 
 </body>
