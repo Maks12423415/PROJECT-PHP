@@ -44,3 +44,7 @@ body {
 a {
   color: white;
 }
+
+#tabela {
+  border: solid black 2pxs;
+}

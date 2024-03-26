@@ -31,12 +31,89 @@ include 'menu.php';
 
 <div >
 
-<table>
+<form action="" method="get">
+<table id="tabela">
     <tr>
         <th>Login</th>
-        <td><?php ?></td>
+        <th>Uprawnienia</th>
+        </tr>
+        <tr>
+        <td><?php 
+
+        $server = "localhost";
+        $dbpass = "";
+        $dbuser = "root";
+        $db = "szkola";
+        
+        
+        $conn = mysqli_connect($server, $dbuser, $dbpass, $db);
+        
+        
+        if(!$conn){
+             mysqli_connect_error($conn);
+        }
+        
+        
+        $sql = "SELECT login FROM `users`";
+        $result = mysqli_query($conn, $sql);
+        
+        if(mysqli_num_rows($result) > 0){
+            echo "<select>";
+            while($row = mysqli_fetch_assoc($result)){
+                    
+                    echo "<option> {$row['login']} </option>";
+                    
+            }
+            echo "</select>";
+        }
+        
+        
+        
+        mysqli_close($conn);
+        ?></td>
+        <td><?php
+        
+        $server = "localhost";
+        $dbpass = "";
+        $dbuser = "root";
+        $db = "szkola";
+        
+        
+        $conn = mysqli_connect($server, $dbuser, $dbpass, $db);
+        
+        
+        if(!$conn){
+             mysqli_connect_error($conn);
+        }
+        
+        
+        $sql = "SELECT upr FROM `users`";
+        $result = mysqli_query($conn, $sql);
+        
+        if(mysqli_num_rows($result) > 0){
+            echo "<select>";
+            while($row = mysqli_fetch_assoc($result)){
+                    
+                    echo "<option> {$row['upr']} </option>";
+                    
+            }
+            echo "</select>";
+        }
+        
+        
+        
+        mysqli_close($conn);
+        
+        
+        
+        
+        
+        ?></td>
+        <td><input type="submit" value="Zmień"></td>
     </tr>
 </table>
+
+</form>
 
 </div>
     
