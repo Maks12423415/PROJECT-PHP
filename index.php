@@ -33,16 +33,19 @@ session_start();
         }
 
         $sql = "SELECT * FROM rodzaje";
+
+        
         $result = mysqli_query($conn, $sql);
 
         if(mysqli_num_rows($result) > 0){
             while($row = mysqli_fetch_assoc($result)){
-                echo "<input type='hidden' name='ID' value='{$row['ID']}'>";
-                echo "<input type='submit' name='submit' class='divy2' value='{$row['tytul_kursy']}'>";
-                $_SESSION['tytul'] = $row['tytul_kursy'];
+                echo "<input type='hidden'  value='{$row['ID']}'>";
+                
+                echo "<input type='submit' name='submit' class='divy2' value='{$row['ID']}' data-id='{$row['ID']}'>";
             }
+            
         }
-
+        
         mysqli_close($conn);
         ?>
     </form>
@@ -61,25 +64,20 @@ if(isset($_POST['submit'])){
          mysqli_connect_error($conn);
     }
 
-    $ID = $_POST['ID']; 
+    $login = $_SESSION['login'];
+    $tytul_id = $_POST['submit']; // Pobieramy ID kursu z hidden input, a nie z przycisku submit
 
-    $tytul = $_SESSION['tytul'];
-    
-    $new_title = $_POST['submit']; 
-
-    $sql = "UPDATE users SET tytuł=? WHERE tytuł=?";
-
-
+    $sql = "UPDATE kursy SET tytul=? WHERE login=?";
     $stmt = mysqli_prepare($conn, $sql);
 
     if($stmt){
-        mysqli_stmt_bind_param($stmt, "ss", $new_title, $tytul);
+        mysqli_stmt_bind_param($stmt, "is", $tytul_id, $login);
         mysqli_stmt_execute($stmt);
 
         if(mysqli_stmt_affected_rows($stmt) > 0) {
-            echo "Pomyślnie zaktualizowano tytuł kursu";
+            echo "Dane zaktualizowane pomyślnie.";
         } else {
-            echo "Błąd aktualizacji tytułu kursu: " . mysqli_stmt_error($stmt);
+            echo "Błąd aktualizacji danych: " . mysqli_stmt_error($stmt);
         }
 
         mysqli_stmt_close($stmt);

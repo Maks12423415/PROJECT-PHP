@@ -31,6 +31,50 @@ include 'menu.php';
 
 <div id="dane">
 
+<?php
+if(isset($_GET['uprawnienia'])){
+$server = "localhost";
+$dbpass = "";
+
+$dbuser = "root";
+$db = "szkola";
+
+
+$conn = mysqli_connect($server, $dbuser, $dbpass, $db);
+
+
+if(!$conn){
+     mysqli_connect_error($conn);
+}
+
+$login = $_SESSION['dane'];
+
+$new_upr = $_GET['uprawnienia'];
+
+$sql="UPDATE `users` SET `upr`=? WHERE login=? ";
+
+$stmt = mysqli_prepare($conn, $sql);
+
+if($stmt){
+    mysqli_stmt_bind_param($stmt, "ss", $new_upr, $login);
+    mysqli_stmt_execute($stmt);
+
+    if(mysqli_stmt_affected_rows($stmt) > 0) {
+        echo "";
+    } else {
+        echo "" . mysqli_stmt_error($stmt);
+    }
+
+    mysqli_stmt_close($stmt);
+} else {
+    echo "Błąd przygotowania zapytania: " . mysqli_error($conn);
+}
+mysqli_close($conn);
+}
+?>
+
+
+
 <form action="" method="get">
 <table id="tabela">
     <tr>
@@ -86,47 +130,7 @@ include 'menu.php';
     </table>
 </form>
 
-<?php
-if(isset($_GET['uprawnienia'])){
-$server = "localhost";
-$dbpass = "";
 
-$dbuser = "root";
-$db = "szkola";
-
-
-$conn = mysqli_connect($server, $dbuser, $dbpass, $db);
-
-
-if(!$conn){
-     mysqli_connect_error($conn);
-}
-
-$login = $_SESSION['dane'];
-
-$new_upr = $_GET['uprawnienia'];
-
-$sql="UPDATE `users` SET `upr`=? WHERE login=? ";
-
-$stmt = mysqli_prepare($conn, $sql);
-
-if($stmt){
-    mysqli_stmt_bind_param($stmt, "ss", $new_upr, $login);
-    mysqli_stmt_execute($stmt);
-
-    if(mysqli_stmt_affected_rows($stmt) > 0) {
-        echo "";
-    } else {
-        echo "" . mysqli_stmt_error($stmt);
-    }
-
-    mysqli_stmt_close($stmt);
-} else {
-    echo "Błąd przygotowania zapytania: " . mysqli_error($conn);
-}
-mysqli_close($conn);
-}
-?>
 
 
 <form action="" method="post">
