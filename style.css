@@ -10,15 +10,41 @@ body {
 
 #baner {
   display: flex;
-  gap: 300px;
+  gap: 250px;
   border-bottom: solid black 3px;
   background-color: rgb(7, 33, 121);
   align-items: center;
+  padding-right: 30px;
 }
 /*kursy.php*/
 
 #języki {
-  height: 85vh;
+  height: 80.35vh;
+  gap: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+  justify-content: center;
+}
+
+#form {
+  height: 80.35vh;
+  gap: 20px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+  justify-content: center;
+}
+
+.divy2 {
+  background-color: rgb(175, 174, 174);
+  height: 75px;
+  width: 500px;
+  border: solid black 2px;
+  border-radius: 15px;
+  text-align: center;
 }
 
 .divy {
@@ -55,4 +81,15 @@ td {
   justify-content: center;
   align-items: center;
   height: 80.35vh;
+  gap: 20px;
+}
+
+.linki {
+  height: 50px;
+  width: 150px;
+  border: solid black 2px;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

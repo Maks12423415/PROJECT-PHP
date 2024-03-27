@@ -1,17 +1,17 @@
 <?php
 if(isset($_SESSION['upr']) && $_SESSION['upr'] == 'admin'){
-    echo " <a href='Admin.php'>ADMIN</a>";
+    echo "<div class='linki'><a href='Admin.php'>ADMIN</a></div>";
 }
 ?>
 
 <?php
 if(isset($_SESSION['zalogowano']) && !$_SESSION['zalogowano']){
     //echo " <a href='/Logowanie.php'>Logowanie  </a> ";
-    echo "<a href='Rejestracja.php'>REJESTRACJA</a>";
-    echo "<a href='Logowanie.php'>LOGOWANIE</a>";
+    echo "<div class='linki'><a href='Rejestracja.php'>REJESTRACJA</a></div>";
+    echo "<div class='linki'><a href='Logowanie.php'>LOGOWANIE</a></div>";
 } else {
-    echo " <a href='index.php'>MAIN</a>";
-    echo "<a href='kursy.php'>MOJE KURSY</a>" ;
-    echo "<a href='wylog.php'>WYLOGUJ</a>";
+    echo "<div class='linki'><a href='index.php'>MAIN</a></div>";
+    echo "<div class='linki'><a href='kursy.php'>MOJE KURSY</a></div>" ;
+    echo "<div class='linki'><a href='wylog.php'>WYLOGUJ</a></div>";
 }
 ?>
