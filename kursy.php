@@ -45,28 +45,39 @@ if(!$conn){
 }
 
 
-$sql = "SELECT * FROM `kursy`, users, rodzaje WHERE users.login=kursy.login AND kursy.tytul=rodzaje.ID";
+$sql = "SELECT * FROM `kursy`, users, rodzaje WHERE users.login=kursy.login AND kursy.tytul=rodzaje.tytul_kursy";
 $result = mysqli_query($conn, $sql);
 
 if(mysqli_num_rows($result) > 0){
     while($row = mysqli_fetch_assoc($result)){
+        $_SESSION['login'] = $row['login']; 
+        $login = $_SESSION['login'];
         if($login == $row['login']){
-            $_SESSION['login']=$row['login'];
+            echo "<div id='m'>";
             
-            echo "<div class='divy'><h1>{$row['tytul_kursy']}</h1></div>";
+            echo "<div type='submit' class='divy'><h1>{$row['tytul_kursy']}</h1></div>";
+            echo "<input type='submit' value='Lekcja 1' class='divy'>";
+            echo "<input type='submit' value='Lekcja 2' class='divy'>";
+            echo "<input type='submit' value='Lekcja 3' class='divy'>";
+            echo "<input type='submit' value='Lekcja 4' class='divy'>";
+            echo "<input type='submit' value='Lekcja 5' class='divy'>";
+            echo "<input type='submit' value='Lekcja 6' class='divy'>";
+            echo "<input type='submit' value='Lekcja 7' class='divy'>";
+            echo "<input type='submit' value='Lekcja 8' class='divy'>";
+            echo "<input type='submit' value='Lekcja 9' class='divy'>";            
+            echo "<input type='submit' value='Lekcja 10' class='divy'>";
+            echo "</div>";
+            echo "<div id='n'>";
+            echo "<div id='z'> </div>";
+            echo "</div>";
         }
     }
 }
 
-
-
 mysqli_close($conn);
 ?>
 
-
-
 </div>
-
 
 </body>
 </html>

@@ -29,9 +29,10 @@ if(isset($_POST["login"]) && isset($_POST["password"])){
     }
 
    
-    $sql = "INSERT INTO `users`(`login`, `pass`, `upr`) VALUES ('$login', '$haslo', 'user')";
 
-    if(mysqli_query($conn, $sql)){
+    $sql = "INSERT INTO `users`(`login`, `pass`, `upr`) VALUES ('$login', '$haslo', 'user');  ";
+    $sql1= "INSERT INTO `kursy`(`login`, `upr`, `tytul`) VALUES ('$login','user',null)";
+    if(mysqli_query($conn, $sql) && mysqli_query($conn, $sql1)){
         
 
        echo "<script>

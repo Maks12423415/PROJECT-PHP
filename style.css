@@ -28,6 +28,10 @@ body {
   justify-content: center;
 }
 
+#jez {
+  row-gap: 10px;
+}
+
 #form {
   height: 80.35vh;
   gap: 20px;
@@ -59,11 +63,38 @@ body {
 }
 
 #kursy {
-  height: 80.35vh;
+  display: grid;
+  grid-template-areas: "m n";
+}
 
-  background-color: rgb(71, 65, 65);
-  padding: 20px;
-  gap: 30px;
+#m {
+  grid-area: m;
+  display: flex;
+  width: 28%;
+  flex-direction: column;
+  row-gap: 5px;
+  padding: 5px;
+  height: auto;
+  height: auto;
+}
+
+#n {
+  grid-area: n;
+  display: flex;
+  height: auto;
+  width: 72%;
+  align-items: center;
+  justify-content: center;
+  float: right;
+  background-color: rgb(204, 201, 201);
+}
+
+#z {
+  border: solid black 5px;
+  border-radius: 5px;
+  padding: 10px;
+  height: 1000px;
+  width: 700px;
 }
 
 a {
@@ -92,4 +123,8 @@ td {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+input[type="submit"] {
+  font-size: 20px;
 }

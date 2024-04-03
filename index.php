@@ -39,9 +39,11 @@ session_start();
 
         if(mysqli_num_rows($result) > 0){
             while($row = mysqli_fetch_assoc($result)){
-                echo "<input type='hidden'  value='{$row['ID']}'>";
+                echo "<div id='jez'>";
+                echo "<input type='hidden' name='hidden'  value='{$row['tytul_kursy']}'>";
                 
-                echo "<input type='submit' name='submit' class='divy2' value='{$row['ID']}' data-id='{$row['ID']}'>";
+                echo "<input type='submit' name='submit' class='divy2' value='{$row['tytul_kursy']}'>";
+                echo "</div>";
             }
             
         }
@@ -65,13 +67,13 @@ if(isset($_POST['submit'])){
     }
 
     $login = $_SESSION['login'];
-    $tytul_id = $_POST['submit']; // Pobieramy ID kursu z hidden input, a nie z przycisku submit
+    $tytul_kursu = $_POST['submit']; // Pobieramy nazwę kursu z przycisku submit
 
     $sql = "UPDATE kursy SET tytul=? WHERE login=?";
     $stmt = mysqli_prepare($conn, $sql);
 
     if($stmt){
-        mysqli_stmt_bind_param($stmt, "is", $tytul_id, $login);
+        mysqli_stmt_bind_param($stmt, "ss", $tytul_kursu, $login);
         mysqli_stmt_execute($stmt);
 
         if(mysqli_stmt_affected_rows($stmt) > 0) {
