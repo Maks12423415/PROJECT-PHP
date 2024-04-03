@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+// Read the text content from the file
+$text = file_get_contents("text_content.txt");
+
 $login = $_SESSION['login'];
 
 ?>
@@ -16,7 +19,6 @@ $login = $_SESSION['login'];
 <body>
     
 <div id="baner">
-
     <img id="logo" src="logo.png" alt="LANMAX">
 
 <?php
@@ -36,22 +38,20 @@ $dbpass = "";
 $dbuser = "root";
 $db = "szkola";
 
-
 $conn = mysqli_connect($server, $dbuser, $dbpass, $db);
-
 
 if(!$conn){
      mysqli_connect_error($conn);
 }
 
-
-$sql = "SELECT * FROM `kursy`, users, rodzaje WHERE users.login=kursy.login AND kursy.tytul=rodzaje.tytul_kursy";
+$sql = "SELECT * FROM `kursy`, users, rodzajeWHERE users.login=kursy.login AND kursy.tytul=rodzaje.tytul_kursy";
 $result = mysqli_query($conn, $sql);
 
 if(mysqli_num_rows($result) > 0){
     while($row = mysqli_fetch_assoc($result)){
         $_SESSION['login'] = $row['login']; 
         $login = $_SESSION['login'];
+        
         if($login == $row['login']){
             echo "<div id='m'>";
             
@@ -68,7 +68,7 @@ if(mysqli_num_rows($result) > 0){
             echo "<input type='submit' value='Lekcja 10' class='divy'>";
             echo "</div>";
             echo "<div id='n'>";
-            echo "<div id='z'> </div>";
+            echo "<div id='z'>$text </div>";
             echo "</div>";
         }
     }

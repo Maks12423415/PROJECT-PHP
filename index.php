@@ -77,14 +77,14 @@ if(isset($_POST['submit'])){
         mysqli_stmt_execute($stmt);
 
         if(mysqli_stmt_affected_rows($stmt) > 0) {
-            echo "Dane zaktualizowane pomyślnie.";
+            echo "";
         } else {
-            echo "Błąd aktualizacji danych: " . mysqli_stmt_error($stmt);
+            echo "" . mysqli_stmt_error($stmt);
         }
 
         mysqli_stmt_close($stmt);
     } else {
-        echo "Błąd przygotowania zapytania: " . mysqli_error($conn);
+        echo "" . mysqli_error($conn);
     }
 
     mysqli_close($conn);
