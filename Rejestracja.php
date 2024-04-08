@@ -31,14 +31,15 @@ if(isset($_POST["login"]) && isset($_POST["password"])){
    
 
     $sql = "INSERT INTO `users`(`login`, `pass`, `upr`) VALUES ('$login', '$haslo', 'user');  ";
-    $sql1= "INSERT INTO `kursy`(`login`, `upr`, `tytul`) VALUES ('$login','user',null)";
-    if(mysqli_query($conn, $sql) && mysqli_query($conn, $sql1)){
+    $sql1 = "INSERT INTO `kursy`(`login`, `upr`, `tytul`) VALUES ('$login','user',null)";
+    //$sql2 = "INSERT INTO `status`(`login`, `status_lekcji`, `tytul`) VALUES ('$login', 'żaden', 'brak')";
+    if(mysqli_query($conn, $sql) && mysqli_query($conn, $sql1) ){
         
 
        echo "<script>
     setTimeout(() => {
     window.location.href = './Logowanie.php'
-    },'2000')
+    },'200')
     </script>";
 
     } else {

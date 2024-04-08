@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 06, 2024 at 05:35 PM
+-- Generation Time: Apr 08, 2024 at 07:49 PM
 -- Wersja serwera: 10.4.28-MariaDB
 -- Wersja PHP: 8.2.4
 
@@ -38,9 +38,14 @@ CREATE TABLE `kursy` (
 --
 
 INSERT INTO `kursy` (`login`, `upr`, `tytul`) VALUES
+('123', 'user', NULL),
 ('admin', 'admin', 'Kurs języka angielskiego'),
-('admin1', 'user', 'Kurs języka arabskiego'),
-('test', 'user', '2');
+('admin1', 'user', 'Kurs języka angielskiego'),
+('admin123', 'user', 'Kurs języka angielskiego'),
+('ktos', 'user', NULL),
+('maks', 'user', NULL),
+('test', 'user', '2'),
+('test1', 'user', 'Kurs języka hiszpańskiego');
 
 -- --------------------------------------------------------
 
@@ -148,6 +153,47 @@ INSERT INTO `rodzaje` (`ID`, `tytul_kursy`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Struktura tabeli dla tabeli `status`
+--
+
+CREATE TABLE `status` (
+  `status_lekcji` text NOT NULL,
+  `tytul` text NOT NULL,
+  `lekcja` int(11) NOT NULL,
+  `login` varchar(30) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `status`
+--
+
+INSERT INTO `status` (`status_lekcji`, `tytul`, `lekcja`, `login`) VALUES
+('0', '', 1, ''),
+('0', '', 2, 'admin123'),
+('1', '', 3, 'admin123'),
+('0', '', 1, 'admin123'),
+('1', '', 4, 'admin123'),
+('1', '', 5, 'admin123'),
+('1', '', 6, 'admin123'),
+('1', '', 7, 'admin123'),
+('1', '', 8, 'admin123'),
+('1', '', 9, 'admin123'),
+('1', '', 10, 'admin123'),
+('żaden', 'brak', 0, 'test1'),
+('1', '', 1, 'test1'),
+('0', '', 2, 'test1'),
+('1', '', 3, 'test1'),
+('0', '', 4, 'test1'),
+('0', '', 5, 'test1'),
+('0', '', 6, 'test1'),
+('0', '', 7, 'test1'),
+('0', '', 8, 'test1'),
+('0', '', 9, 'test1'),
+('0', '', 10, 'test1');
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabeli dla tabeli `users`
 --
 
@@ -162,9 +208,14 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`login`, `pass`, `upr`) VALUES
+('123', '202cb962ac59075b964b07152d234b70', 'user'),
 ('admin', '202cb962ac59075b964b07152d234b70', 'user'),
 ('admin1', '202cb962ac59075b964b07152d234b70', 'admin'),
+('admin123', '202cb962ac59075b964b07152d234b70', 'user'),
+('ktos', '202cb962ac59075b964b07152d234b70', 'user'),
+('maks', '202cb962ac59075b964b07152d234b70', 'user'),
 ('ten_debil', '202cb962ac59075b964b07152d234b70', 'admin'),
+('test1', '202cb962ac59075b964b07152d234b70', 'user'),
 ('user', '202cb962ac59075b964b07152d234b70', 'admin');
 
 --
