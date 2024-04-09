@@ -1,9 +1,14 @@
 <?php
 if(isset($_SESSION['upr']) && $_SESSION['upr'] == 'admin'){
     echo "<div class='linki'><a href='Admin.php'>ADMIN</a></div>";
+    echo "<div class='linki'><a href='pracownik.php'>PRACOWNIK</div>";
 }
 ?>
-
+<?php
+if(isset($_SESSION['upr'])&& $_SESSION['upr'] == 'pracownik'){
+    echo "<div class='linki'><a href='pracownik.php'>PRACOWNIK</div>";
+}
+?>
 <?php
 if(isset($_SESSION['zalogowano']) && !$_SESSION['zalogowano']){
     //echo " <a href='/Logowanie.php'>Logowanie  </a> ";

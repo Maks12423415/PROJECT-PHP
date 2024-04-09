@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-$login = $_SESSION['login'];
+$login = $_SESSION['login']; // Pobranie zalogowanego użytkownika z sesji
 
 // Połączenie z bazą danych
 $server = "localhost";
@@ -15,24 +15,28 @@ if(!$conn){
     die("Connection failed: " . mysqli_connect_error());
 }
 
+$tytul = $_SESSION['tytul']; // Pobranie tytułu kursu z sesji
+
 // Dodawanie wszystkich lekcji, jeśli nie istnieją
 for ($i = 1; $i <= 10; $i++) {
     $lesson_number = $i;
-    $check_query = "SELECT * FROM status WHERE login = '$login' AND lekcja = $lesson_number";
+    // Sprawdzenie czy istnieje wpis dla danego użytkownika i lekcji w bazie danych
+    $check_query = "SELECT * FROM status, rodzaje, kursy WHERE kursy.tytul=rodzaje.tytul_kursy AND status.tytul=kursy.tytul AND status.login = '$login' AND lekcja = $lesson_number";
     $check_result = mysqli_query($conn, $check_query);
     
     if(mysqli_num_rows($check_result) == 0) {
-        // Jeżeli lekcja nie istnieje, dodajemy ją do bazy danych
-        $insert_query = "INSERT INTO status (login, status_lekcji, lekcja) VALUES ('$login', FALSE, $lesson_number)";
+        // Jeżeli lekcja nie istnieje dla danego użytkownika, dodajemy ją do bazy danych
+        $insert_query = "INSERT INTO `status`(`status_lekcji`, `tytul`, `lekcja`, `login`) VALUES (FALSE , '$tytul' ,  '$lesson_number' , '$login' )";
         mysqli_query($conn, $insert_query);
     }
 }
 
+// Obsługa formularza
 if(isset($_POST['lesson'])) {
     $lesson_number = filter_input(INPUT_POST, 'lesson', FILTER_SANITIZE_NUMBER_INT);
     
     // Sprawdzenie czy użytkownik ma już zapisaną daną lekcję w bazie danych
-    $check_query = "SELECT * FROM status WHERE login = '$login' AND lekcja = $lesson_number";
+    $check_query = "SELECT * FROM status, rodzaje, kursy WHERE kursy.tytul=rodzaje.tytul_kursy AND status.tytul=kursy.tytul AND status.login = '$login' AND lekcja = $lesson_number";
     $check_result = mysqli_query($conn, $check_query);
 
     if(mysqli_num_rows($check_result) > 0) {
@@ -41,8 +45,7 @@ if(isset($_POST['lesson'])) {
         mysqli_query($conn, $update_query);
     } else {
         // W przeciwnym razie dodajemy nowy wpis do bazy danych
-        $tytul = $row['tytul_kursy']; // Przeniesione z definicji zapytania SQL
-        $insert_query = "INSERT INTO status (login, status_lekcji, lekcja, tytul) VALUES ('$login', TRUE, $lesson_number, '$tytul')";
+        $insert_query = "INSERT INTO `status`(`status_lekcji`, `tytul`, `lekcja`, `login`) VALUES (TRUE , '$tytul' ,  '$lesson_number' , '$login'  )";
         mysqli_query($conn, $insert_query);
     }
 }
@@ -62,20 +65,12 @@ if(isset($_POST['lesson'])) {
         .checkbox-label {
             font-size: 18px;
         }
-    </style>
-    <script>
-        // Funkcja do ustawiania stanu koloru checkboxa na podstawie danych z PHP
-        function setCheckboxColor(checkboxId, status) {
-            var checkbox = document.getElementById(checkboxId);
-            if (status === '1') {
-                checkbox.checked = true;
-                checkbox.style.backgroundColor = 'green';
-            } else {
-                checkbox.checked = false;
-                checkbox.style.backgroundColor = ''; // Reset to default color
-            }
+
+        .checkbox-green {
+            background-color: green;
         }
-    </script>
+    </style>
+   
 </head>
 <body>
 
@@ -99,8 +94,9 @@ if(isset($_POST['lesson'])) {
     if(mysqli_num_rows($result) > 0){
         // Pętla przez wszystkie wiersze wynikowe
         while($row = mysqli_fetch_assoc($result)){
-            $tytul = $row['tytul_kursy']; // Przeniesione z definicji zapytania SQL
+            $tytul = $row['tytul_kursy']; // Pobranie tytułu kursu
 
+            
             // Sprawdzenie czy zalogowany użytkownik ma dostęp do tego kursu
             if($login == $row['login']){
                 echo "<div id='m'>";
@@ -115,10 +111,12 @@ if(isset($_POST['lesson'])) {
                     $status_row = mysqli_fetch_assoc($status_result);
                     if ($status_row !== null && isset($status_row['status_lekcji'])) {
                         $status = $status_row['status_lekcji'];
+                        $checkbox_class = ($status == '1') ? 'checkbox-green' : '';
                         echo "<div>";
                         echo "<label class='checkbox-label' for='checkbox_$i'>Odznacz lekcję:</label>";
-                        echo "<input id='checkbox_$i' type='checkbox' onchange='setCheckboxColor(\"checkbox_$i\", \"$status\")' />";
-                        echo "<input type='submit' name='lesson' value='Lekcja $i' class='divy'></div>";
+                        echo "<input id='checkbox_$i' type='checkbox' class='$checkbox_class' onchange='setButtonColor(\"input_$i\", \"$status\")' />";
+                        $button_class = ($status == '1') ? 'checkbox-green' : '';
+                        echo "<input type='submit' id='input_$i' name='lesson' value='Lekcja $i' class='divy $button_class'></div>";
                     }
                 }
                 echo "</form>";
@@ -151,6 +149,22 @@ if(isset($_POST['lesson'])) {
     mysqli_close($conn);
     ?>
 </div>
+
+<!-- Dodanie kodu JavaScript -->
+<script>
+    // Funkcja zmieniająca kolor przycisku na podstawie statusu lekcji
+    function setButtonColor(buttonId, status) {
+        var button = document.getElementById(buttonId);
+        var checkbox = button.previousElementSibling;
+        if (checkbox.checked) { // Jeśli checkbox jest zaznaczony
+            if (status === "1") { // Jeśli status lekcji to TRUE
+                button.classList.add('checkbox-green'); // Dodaj klasę, aby zmienić kolor na zielony
+            } else { // W przeciwnym razie
+                button.classList.remove('checkbox-green'); // Usuń klasę, aby przywrócić domyślny kolor
+            }
+        }
+    }
+</script>
 
 </body>
 </html>

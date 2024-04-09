@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 08, 2024 at 07:49 PM
+-- Generation Time: Apr 09, 2024 at 03:37 PM
 -- Wersja serwera: 10.4.28-MariaDB
 -- Wersja PHP: 8.2.4
 
@@ -41,9 +41,10 @@ INSERT INTO `kursy` (`login`, `upr`, `tytul`) VALUES
 ('123', 'user', NULL),
 ('admin', 'admin', 'Kurs języka angielskiego'),
 ('admin1', 'user', 'Kurs języka angielskiego'),
-('admin123', 'user', 'Kurs języka angielskiego'),
+('admin123', 'user', 'Kurs języka niemieckiego'),
 ('ktos', 'user', NULL),
 ('maks', 'user', NULL),
+('szymon', 'user', 'Kurs języka rosyjskiego'),
 ('test', 'user', '2'),
 ('test1', 'user', 'Kurs języka hiszpańskiego');
 
@@ -168,28 +169,16 @@ CREATE TABLE `status` (
 --
 
 INSERT INTO `status` (`status_lekcji`, `tytul`, `lekcja`, `login`) VALUES
-('0', '', 1, ''),
-('0', '', 2, 'admin123'),
-('1', '', 3, 'admin123'),
-('0', '', 1, 'admin123'),
-('1', '', 4, 'admin123'),
-('1', '', 5, 'admin123'),
-('1', '', 6, 'admin123'),
-('1', '', 7, 'admin123'),
-('1', '', 8, 'admin123'),
-('1', '', 9, 'admin123'),
-('1', '', 10, 'admin123'),
-('żaden', 'brak', 0, 'test1'),
-('1', '', 1, 'test1'),
-('0', '', 2, 'test1'),
-('1', '', 3, 'test1'),
-('0', '', 4, 'test1'),
-('0', '', 5, 'test1'),
-('0', '', 6, 'test1'),
-('0', '', 7, 'test1'),
-('0', '', 8, 'test1'),
-('0', '', 9, 'test1'),
-('0', '', 10, 'test1');
+('1', 'Kurs języka hiszpańskiego', 1, 'szymon'),
+('1', 'Kurs języka hiszpańskiego', 2, 'szymon'),
+('0', 'Kurs języka hiszpańskiego', 3, 'szymon'),
+('0', 'Kurs języka hiszpańskiego', 4, 'szymon'),
+('0', 'Kurs języka hiszpańskiego', 5, 'szymon'),
+('0', 'Kurs języka hiszpańskiego', 6, 'szymon'),
+('0', 'Kurs języka hiszpańskiego', 7, 'szymon'),
+('0', 'Kurs języka hiszpańskiego', 8, 'szymon'),
+('0', 'Kurs języka hiszpańskiego', 9, 'szymon'),
+('0', 'Kurs języka hiszpańskiego', 10, 'szymon');
 
 -- --------------------------------------------------------
 
@@ -214,6 +203,7 @@ INSERT INTO `users` (`login`, `pass`, `upr`) VALUES
 ('admin123', '202cb962ac59075b964b07152d234b70', 'user'),
 ('ktos', '202cb962ac59075b964b07152d234b70', 'user'),
 ('maks', '202cb962ac59075b964b07152d234b70', 'user'),
+('szymon', '202cb962ac59075b964b07152d234b70', 'admin'),
 ('ten_debil', '202cb962ac59075b964b07152d234b70', 'admin'),
 ('test1', '202cb962ac59075b964b07152d234b70', 'user'),
 ('user', '202cb962ac59075b964b07152d234b70', 'admin');

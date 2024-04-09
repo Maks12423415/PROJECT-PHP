@@ -1,5 +1,31 @@
 <?php
 session_start();
+
+$login = $_SESSION['login'];
+
+$server = "localhost";
+$dbpass = "";
+$dbuser = "root";
+$db = "szkola";
+
+$conn = mysqli_connect($server, $dbuser, $dbpass, $db);
+
+if(!$conn){
+     mysqli_connect_error($conn);
+}
+
+$sql = "SELECT * FROM status, rodzaje, kursy WHERE kursy.tytul=rodzaje.tytul_kursy AND status.tytul=kursy.tytul AND status.login = '$login'";
+    $result = mysqli_query($conn, $sql);
+
+    if(mysqli_num_rows($result) > 0){
+        while($row = mysqli_fetch_assoc($result)){
+            $_SESSION['tytul'] = $row['tytul_kursy'];
+
+
+        }
+    }
+
+mysqli_close($conn);
 ?>
 
 <!DOCTYPE html>
@@ -90,6 +116,8 @@ if(isset($_POST['submit'])){
     mysqli_close($conn);
 }
 ?>
+
+
 
 <div id="stopka"> </div>
 
