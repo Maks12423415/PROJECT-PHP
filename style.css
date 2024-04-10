@@ -70,20 +70,23 @@ body {
 #m {
   grid-area: m;
   display: flex;
-  width: 28%;
+  width: auto;
   flex-direction: column;
   row-gap: 5px;
   padding: 5px;
   height: auto;
+  align-items: center;
+  text-align: center;
 }
 
 #n {
   grid-area: n;
   display: flex;
   height: auto;
-  width: 72%;
+  width: auto;
   align-items: center;
   justify-content: center;
+
   float: right;
   background-color: rgb(204, 201, 201);
   padding: 10px;
@@ -127,4 +130,11 @@ td {
 
 input[type="submit"] {
   font-size: 20px;
+}
+
+#dodawanie_kursów {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
 }
