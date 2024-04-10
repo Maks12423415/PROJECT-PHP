@@ -16,8 +16,8 @@ body {
   align-items: center;
   padding-right: 30px;
 }
-/*kursy.php*/
 
+/*kursy.php*/
 #języki {
   height: 80.35vh;
   gap: 20px;
@@ -86,7 +86,6 @@ body {
   width: auto;
   align-items: center;
   justify-content: center;
-
   float: right;
   background-color: rgb(204, 201, 201);
   padding: 10px;
