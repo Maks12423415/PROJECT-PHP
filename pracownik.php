@@ -65,26 +65,43 @@ if(isset($_POST['delete_kurs'])){
             <tr>
                 <td>
                 <?php 
-                if(isset($_POST['Nowy_kurs'])){
-                    $server = "localhost";
-                    $dbpass = "";
-                    $dbuser = "root";
-                    $db = "szkola";
+if(isset($_POST['Nowy_kurs'])){
+    $server = "localhost";
+    $dbpass = "";
+    $dbuser = "root";
+    $db = "szkola";
 
-                    $conn = mysqli_connect($server, $dbuser, $dbpass, $db);
+    $conn = mysqli_connect($server, $dbuser, $dbpass, $db);
 
-                    if(!$conn){
-                        die("Connection failed: " . mysqli_connect_error());
-                    }
+    if(!$conn){
+        die("Connection failed: " . mysqli_connect_error());
+    }
 
-                    $tytul = $_POST['Nowy_kurs'];
+    $tytul = $_POST['Nowy_kurs'];
 
-                    $sql = "INSERT INTO `rodzaje`( `tytul_kursy`) VALUES ('$tytul')";
-                    mysqli_query($conn, $sql);
+    $sql = "INSERT INTO `rodzaje` (`tytul_kursy`) VALUES (?)";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $tytul);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
 
-                    mysqli_close($conn);
-                }
-                ?>
+    // Dodaj brakujące lekcje dla nowo dodanego kursu
+    $sql1 = "INSERT INTO `lekcje` (`id_lekcji`, `tytul`, `tresc`) VALUES (?, ?, 'Brak aktualnej treści')";
+    $stmt1 = mysqli_prepare($conn, $sql1);
+    for($i = 1; $i <= 10; $i++) {
+        mysqli_stmt_bind_param($stmt1, "is", $i, $tytul);
+        mysqli_stmt_execute($stmt1);
+    }
+    mysqli_stmt_close($stmt1);
+
+    mysqli_close($conn);
+}
+?>
+
+
+
+                
+                
                     <?php 
                     $server = "localhost";
                     $dbpass = "";
@@ -117,9 +134,6 @@ if(isset($_POST['delete_kurs'])){
     </form>
 </div>
 
-<div id='test' contenteditable="true">
-    TEKST DO EDYCJI
-</div>
 
 </body>
 </html>

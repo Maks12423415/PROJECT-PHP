@@ -92,11 +92,15 @@ if(isset($_POST['lesson_number']) && isset($_POST['edited_text'])) {
                     $button_class = ($status == '1') ? 'button-green' : '';
                     echo "<div>";
                     echo "<label class='checkbox-label' for='checkbox_true_$i'>Zrobione:</label>";
-                    echo "<input id='checkbox_true_$i' type='checkbox' name='checkbox_true_$i' value='1' onchange='handleCheckboxChange($lesson_number, true, \"$tytul\")' />";
+                    echo "<input id='checkbox_true_$i' type='checkbox' name='checkbox_true_$i' value='1' onchange='handleCheckboxChange($lesson_number, true, \"$tytul\", \"{$tytul}_lesson_$lesson_number\")' />";
                     echo "<label class='checkbox-label' for='checkbox_false_$i'>Niezrobione:</label>";
-                    echo "<input id='checkbox_false_$i' type='checkbox' name='checkbox_false_$i' value='0' onchange='handleCheckboxChange($lesson_number, false, \"$tytul\")' />";
-                    echo "<input type='submit' id='$tytul' name='lesson' value='Lekcja $i' class='divy $button_class'></div>";
+                    echo "<input id='checkbox_false_$i' type='checkbox' name='checkbox_false_$i' value='0' onchange='handleCheckboxChange($lesson_number, false, \"$tytul\", \"{$tytul}_lesson_$lesson_number\")' />";
+                    echo "<input type='submit' id='{$tytul}_lesson_$i' name='lesson' value='Lekcja $i' class='divy $button_class' >";
+
+
+
                 }
+                
                 echo "</form>";
                 echo "</div>";
                 echo "<div id='n'>";
@@ -110,9 +114,9 @@ if(isset($_POST['lesson_number']) && isset($_POST['edited_text'])) {
                         if ($lesson_row !== null) {
                             // Sprawdzenie uprawnień użytkownika
                             if($_SESSION['upr'] != "pracownik" && $_SESSION['upr'] != "admin"){
-                                echo "<div id='z' contenteditable='false'><p>{$lesson_row['tresc']}</p></div>";
+                                echo "<div id='z' contenteditable='false' onBlur='saveEditedContent($lesson_number, \"$tytul\")'><p>{$lesson_row['tresc']}</p></div>";
                             } else {
-                                echo "<div id='z' contenteditable='true'><p>{$lesson_row['tresc']}</p></div>";
+                                echo "<div id='z' contenteditable='true' onBlur='saveEditedContent($lesson_number, \"$tytul\")'><p>{$lesson_row['tresc']}</p></div>";
                             }
                             echo "<input type='hidden' name='lesson_number' value='$lesson_number'>"; // Dodanie ukrytego pola z numerem lekcji
                             echo "<input type='hidden' name='tytul' value='$tytul'>"; // Dodanie ukrytego pola z aktualnym tytułem kursu
@@ -136,45 +140,12 @@ if(isset($_POST['lesson_number']) && isset($_POST['edited_text'])) {
 
 <!-- Dodanie kodu JavaScript -->
 <script>
-    // Obsługa zapisu zmienionego tekstu
-    document.getElementById('z').addEventListener('blur', function() {
-        var lessonNumber = document.querySelector('input[name="lesson_number"]').value;
-        var editedText = this.innerHTML;
-        var tytul = document.querySelector('input[name="tytul"]').value; // Pobranie aktualnego tytułu kursu
+    // Funkcja do zapisywania zmienionej treści lekcji
+    function saveEditedContent(lessonNumber, tytul) {
+        var editedText = document.getElementById('z').innerHTML;
         var formData = new FormData();
         formData.append('lesson_number', lessonNumber);
         formData.append('edited_text', editedText);
-        formData.append('tytul', tytul); // Przekazanie aktualnego tytułu kursu
-
-        fetch('kursy.php', { 
-            method: 'POST',
-            body: formData
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.text();
-        })
-        .then(data => {
-            console.log(data); // Możesz dodać obsługę odpowiedzi z serwera, np. wyświetlenie komunikatu o powodzeniu
-        })
-        .catch(error => {
-            console.error('There was a problem with your fetch operation:', error);
-        });
-    });
-
-    // Obsługa zaznaczania/odznaczania checkboxów
-    function handleCheckboxChange(lessonNumber, isChecked, tytul) {
-        toggleButtonColor(tytul, lessonNumber, isChecked); // Aktualizacja koloru przycisku
-        updateLessonStatus(lessonNumber, isChecked, tytul); // Aktualizacja stanu lekcji w bazie danych
-    }
-
-    // Funkcja aktualizująca stan lekcji w bazie danych
-    function updateLessonStatus(lessonNumber, isChecked, tytul) {
-        var formData = new FormData();
-        formData.append('lesson_number', lessonNumber);
-        formData.append('checkbox_value', isChecked ? '1' : '0');
         formData.append('tytul', tytul);
 
         fetch('kursy.php', {
@@ -194,6 +165,96 @@ if(isset($_POST['lesson_number']) && isset($_POST['edited_text'])) {
             console.error('There was a problem with your fetch operation:', error);
         });
     }
+
+    function handleCheckboxChange(lessonNumber, isChecked, tytul, buttonId) {
+    toggleButtonColor(tytul, lessonNumber, isChecked, buttonId); // Aktualizujemy kolor przycisku
+
+    // Przygotowanie danych do przesłania za pomocą AJAX
+    var formData = new FormData();
+    formData.append('lesson_number', lessonNumber);
+    formData.append('checkbox_value', isChecked ? '1' : '0');
+    formData.append('tytul', tytul);
+
+    // Wywołanie funkcji AJAX do przesłania danych do serwera
+    fetch('kursy.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.text();
+    })
+    .then(data => {
+        console.log(data); // Tutaj możesz obsłużyć odpowiedź z serwera
+        // Dodaj komunikat o zapisaniu zmian
+        var messageElement = document.createElement('div');
+        messageElement.textContent = 'Zmiany zostały zapisane.';
+        document.body.appendChild(messageElement);
+        setTimeout(() => {
+            messageElement.remove(); // Usuń komunikat po kilku sekundach
+        }, 3000);
+    })
+    .catch(error => {
+        console.error('There was a problem with your fetch operation:', error);
+    });
+}
+
+function updateLessonStatus(lessonNumber, isChecked, tytul, buttonId, buttonValue) {
+    var button = document.getElementById(buttonId);
+    var buttonColor = buttonValue;
+
+    var formData = new FormData();
+    formData.append('lesson_number', lessonNumber);
+    formData.append('checkbox_value', isChecked ? '1' : '0');
+    formData.append('tytul', tytul);
+    formData.append('button_color', buttonColor);
+
+    // Wywołanie funkcji AJAX do przesłania danych do serwera
+    fetch('kursy.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.text();
+    })
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.error('There was a problem with your fetch operation:', error);
+    });
+}
+
+function toggleButtonColor(tytul, lessonNumber, isChecked, buttonId) {
+    var button = document.getElementById(buttonId);
+    var buttonColor = button.classList.contains('button-green') ? 'green' : 'none'; // Pobieramy kolor przycisku
+    if (button !== null) {
+        if (isChecked) {
+            button.classList.add('button-green');
+        } else {
+            button.classList.remove('button-green');
+        }
+        // Wywołujemy funkcję aktualizującą stan lekcji z przekazaniem koloru przycisku
+        updateLessonStatus(lessonNumber, isChecked, tytul, buttonId, buttonColor);
+    } else {
+        console.log("Przycisk o identyfikatorze " + buttonId + " nie istnieje.");
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Znajdź formularz
+    var form = document.querySelector('form');
+
+    // Nie dodajemy już obsługi zdarzenia submit formularza, co przywróci domyślne zachowanie formularza
+});
+
+
+
 </script>
 
 </body>
