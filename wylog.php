@@ -5,14 +5,9 @@ $_SESSION['zalogowano'] = false;
 $_SESSION['user'] = "";
 $_SESSION['upr'] = "";
 
-//echo "Zostałeś wylogowany";
+header("Location: ./Rejestracja.php");
 
-// Przekierowanie za pomocą JavaScript
-echo "<script>
-    setTimeout(() => {
-    window.location.href = './index.php'
-    },'2000')
-    </script>"
+
 
 ?>
 <!DOCTYPE html>

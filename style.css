@@ -1,4 +1,4 @@
-/*index.html*/
+/* index.html */
 #logo {
   width: 250px;
   height: 15vh;
@@ -6,18 +6,24 @@
 
 body {
   margin: 0px;
+  background-color: #f0f0f0; /* Tło dla całej strony */
 }
 
 #baner {
   display: flex;
-  gap: 250px;
+  gap: 150px;
   border-bottom: solid black 3px;
   background-color: rgb(7, 33, 121);
   align-items: center;
   padding-right: 30px;
+  transition: background-color 0.5s ease; /* Dodano efekt animacji zmiany koloru tła */
 }
 
-/*kursy.php*/
+#baner:hover {
+  background-color: rgb(0, 51, 102); /* Nowy kolor tła po najechaniu kursorem */
+}
+
+/* kursy.php */
 #języki {
   height: 80.35vh;
   gap: 20px;
@@ -26,6 +32,7 @@ body {
   flex-direction: column;
   padding: 20px;
   justify-content: center;
+  background-color: #f0f0f0; /* Tło dla tej strony */
 }
 
 #jez {
@@ -40,6 +47,23 @@ body {
   flex-direction: column;
   padding: 20px;
   justify-content: center;
+  background-color: #f0f0f0; /* Tło dla tej strony */
+}
+
+/* Add your CSS styles here */
+#kursy-container {
+  display: flex;
+  gap: 20px;
+}
+
+#przyciski {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
+#tresc {
+  flex-grow: 1; /* Elastyczne dostosowanie do dostępnej przestrzeni */
 }
 
 .divy2 {
@@ -49,6 +73,12 @@ body {
   border: solid black 2px;
   border-radius: 15px;
   text-align: center;
+  transition: background-color 0.3s ease; /* Dodano efekt przejścia dla przycisków */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Dodano subtelny cień */
+}
+
+.divy2:hover {
+  background-color: rgb(0, 102, 204); /* Nowy kolor po najechaniu kursorem */
 }
 
 .divy {
@@ -64,17 +94,16 @@ body {
 
 #kursy {
   display: grid;
-  grid-template-areas: "m n";
+  grid-template-columns: auto auto; /* Dwie kolumny */
+  grid-template-areas: "m n"; /* Obszar dla diva m i n */
 }
 
 #m {
   grid-area: m;
   display: flex;
-  width: auto;
   flex-direction: column;
   row-gap: 5px;
   padding: 5px;
-  height: auto;
   align-items: center;
   text-align: center;
 }
@@ -97,6 +126,7 @@ body {
   padding: 10px;
   height: 1000px;
   width: 700px;
+  float: right;
 }
 
 a {
@@ -119,15 +149,28 @@ td {
 
 .linki {
   height: 50px;
-  width: 150px;
+  min-width: 150px; /* Minimalna szerokość przycisku */
+  width: auto; /* Automatyczne dopasowanie szerokości do zawartości */
   border: solid black 2px;
   border-radius: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: #007bff; /* Kolor tła */
+  color: white; /* Kolor tekstu */
+  text-decoration: none; /* Usunięcie podkreślenia z linków */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Dodanie efektów przejścia */
+  white-space: nowrap; /* Zapobieganie zawijaniu tekstu */
+  overflow: hidden; /* Ukrywanie zawiniętego tekstu */
 }
 
-input[type="submit"] {
+.linki:hover {
+  background-color: #0056b3; /* Nowy kolor tła po najechaniu kursorem */
+  color: #f0f0f0; /* Nowy kolor tekstu po najechaniu kursorem */
+  cursor: pointer; /* Zmiana kształtu kursora na wskaźnik */
+}
+
+.input[type="submit"] {
   font-size: 20px;
 }
 
@@ -136,4 +179,97 @@ input[type="submit"] {
   justify-content: center;
   align-items: center;
   gap: 20px;
+}
+
+/* Animacja przycisku */
+.button-green {
+  background-color: green;
+  transition: background-color 0.3s ease-in-out;
+}
+
+/* Efekt przy najechaniu na przycisk */
+.button-green:hover {
+  background-color: darkgreen;
+}
+
+/* Animacja zmiany tła przy edycji treści lekcji */
+#z {
+  transition: background-color 0.5s ease-in-out;
+}
+
+#z:hover {
+  background-color: lightgray;
+}
+
+/* Stylowanie przycisków z checkboxami */
+.checkbox-label {
+  font-size: 18px;
+  margin-right: 5px;
+}
+
+input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+/* Stylowanie treści lekcji */
+#z {
+  border: solid black 5px;
+  border-radius: 15px;
+  padding: 10px;
+  height: 1000px;
+  width: 700px;
+  background-color: white; /* Domyślne tło */
+  overflow-y: auto; /* Dodanie paska przewijania w razie potrzeby */
+}
+
+#panel_pracownika {
+  width: 80%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f2f2f2;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+#panel_pracownika h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.formularz {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+.formularz label {
+  color: #333;
+  margin-right: 10px;
+}
+
+.formularz input[type="text"],
+.formularz select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.button {
+  padding: 8px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+#pra {
+  height: 80.35vh;
 }

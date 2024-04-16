@@ -6,7 +6,7 @@
 }
 
 body {
-  background-color: greenyellow;
+  background-color: #ffffff; /* Białe tło */
   margin: 0;
   display: flex;
   justify-content: center;
@@ -16,9 +16,9 @@ body {
 }
 
 #logowanie {
-  border: solid black 3px;
+  border: solid #000000 3px; /* Czarna ramka */
   border-radius: 5px;
-  background-color: gray;
+  background-color: #808080; /* Szare tło */
   width: 500px;
   padding: 20px;
   text-align: center;
@@ -30,22 +30,22 @@ input[type="submit"] {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #cccccc; /* Jasnoszare obramowanie */
   border-radius: 5px;
 }
 
 input[type="submit"] {
-  background-color: #4caf50;
-  color: white;
+  background-color: #0000ff; /* Niebieski przycisk */
+  color: #ffffff; /* Biały tekst */
   cursor: pointer;
 }
 
 input[type="submit"]:hover {
-  background-color: #45a049;
+  background-color: #00008b; /* Ciemniejszy odcień niebieskiego po najechaniu */
 }
 
 .error-message {
-  color: red;
+  color: #ff0000; /* Czerwony kolor dla komunikatu o błędzie */
   margin-top: 10px;
 }
 
@@ -66,7 +66,7 @@ h1 {
 }
 
 a {
-  color: blue;
+  color: #0000ff; /* Niebieski kolor dla odnośnika */
   text-decoration: none;
 }
 

@@ -3,6 +3,11 @@ session_start();
 
 $login = $_SESSION['login'];
 
+
+if(!$_SESSION['login'] ){
+    header("Location: ./Rejestracja.php");
+}
+
 $server = "localhost";
 $dbpass = "";
 $dbuser = "root";

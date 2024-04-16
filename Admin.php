@@ -5,6 +5,41 @@ if($_SESSION['upr'] != "admin"){
     header("Location: ./index.php");
 }
 
+$server = "localhost";
+$dbpass = "";
+$dbuser = "root";
+$db = "szkola";
+
+$conn = mysqli_connect($server, $dbuser, $dbpass, $db);
+
+if(!$conn){
+    mysqli_connect_error($conn);
+}
+
+if(isset($_POST['delete_user'])){
+    $login = $_POST['login'];
+
+    $sql = "DELETE FROM `users` WHERE login=?"; 
+
+    $stmt = mysqli_prepare($conn, $sql);
+
+    if($stmt){
+        mysqli_stmt_bind_param($stmt, "s", $login); 
+        mysqli_stmt_execute($stmt);
+
+        if(mysqli_stmt_affected_rows($stmt) > 0) {
+            echo "";
+        } else {
+            echo "" . mysqli_stmt_error($stmt);
+        }
+
+        mysqli_stmt_close($stmt);
+    } else {
+        echo "" . mysqli_error($conn);
+    }
+}
+
+mysqli_close($conn);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -170,43 +205,7 @@ mysqli_close($conn);
         </tr>
     </table>
 </form>
-<?php
-$server = "localhost";
-$dbpass = "";
-$dbuser = "root";
-$db = "szkola";
 
-$conn = mysqli_connect($server, $dbuser, $dbpass, $db);
-
-if(!$conn){
-    mysqli_connect_error($conn);
-}
-
-if(isset($_POST['delete_user'])){
-    $login = $_POST['login'];
-
-    $sql = "DELETE FROM `users` WHERE login=?"; 
-
-    $stmt = mysqli_prepare($conn, $sql);
-
-    if($stmt){
-        mysqli_stmt_bind_param($stmt, "s", $login); 
-        mysqli_stmt_execute($stmt);
-
-        if(mysqli_stmt_affected_rows($stmt) > 0) {
-            echo "";
-        } else {
-            echo "" . mysqli_stmt_error($stmt);
-        }
-
-        mysqli_stmt_close($stmt);
-    } else {
-        echo "" . mysqli_error($conn);
-    }
-}
-
-mysqli_close($conn);
-?>
 
 
 
