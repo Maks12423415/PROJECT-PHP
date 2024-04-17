@@ -15,7 +15,7 @@ if(isset($_POST['delete_kurs'])){
     
     $conn = mysqli_connect($server, $dbuser, $dbpass, $db);
     
-    if(!$conn){
+    if(!$conn){ 
         die("Connection failed: " . mysqli_connect_error());
     }
     
@@ -93,6 +93,43 @@ if(isset($_POST['delete_kurs'])){
                 <input type="submit" name="delete_kurs" value="Usuń" class="button">
             </form>
         </div>
+
+                <!-- Tabela użytkowników i przypisanych do nich kursów -->
+        <table>
+            <tr>
+                <th>Użytkownik</th>
+                <th>Aktualny kurs</th>
+            </tr>
+            <?php
+            $server = "localhost";
+            $dbpass = "";
+            $dbuser = "root";
+            $db = "szkola";
+
+            $conn = mysqli_connect($server, $dbuser, $dbpass, $db);
+
+            if(!$conn){
+                die("Connection failed: " . mysqli_connect_error());
+            }
+
+            $sql = "SELECT users.login, kursy.tytul FROM `kursy` JOIN `users` ON users.login = kursy.login";
+            $result = mysqli_query($conn, $sql);
+
+            if(mysqli_num_rows($result) > 0){
+                while($row = mysqli_fetch_assoc($result)){
+                    echo "<tr>";
+                    echo "<td>{$row['login']}</td>";
+                    echo "<td>{$row['tytul']}</td>";
+                    echo "</tr>";
+                }
+            } else {
+                echo "<tr><td colspan='2'>Brak danych do wyświetlenia</td></tr>";
+            }
+
+            mysqli_close($conn);
+            ?>
+        </table>
+
     </div>
 </div>
 </body>

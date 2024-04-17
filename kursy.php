@@ -1,6 +1,15 @@
 <?php
 session_start();
 
+echo "<div id='baner'>
+<img id='logo' src='logo.png' alt='LANMAX'>
+";
+
+
+include 'menu.php';
+echo"
+</div>";
+
 $login = $_SESSION['login']; // Pobranie zalogowanego użytkownika z sesji
 
 // Połączenie z bazą danych
@@ -35,6 +44,29 @@ function saveLessonStatus($lessonNumber, $tytul, $status, $conn) {
     echo "Zaktualizowano status lekcji.";
 }
 
+// Funkcja do sprawdzenia czy użytkownik ma wpis w tabeli status
+function checkUserStatus($login, $tytul, $conn) {
+    $check_status_query = "SELECT * FROM status WHERE login = ? AND tytul = ?";
+    $stmt = mysqli_prepare($conn, $check_status_query);
+    mysqli_stmt_bind_param($stmt, "ss", $login, $tytul);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    mysqli_stmt_close($stmt);
+    return mysqli_num_rows($result) > 0;
+}
+
+// Funkcja do dodania użytkownika do tabeli status z 10 lekcjami
+function addUserToStatus($login, $tytul, $conn) {
+    for ($i = 1; $i <= 10; $i++) {
+        $add_user_query = "INSERT INTO status (login, lekcja, tytul, status_lekcji) VALUES (?, ?, ?, 0)";
+        $stmt = mysqli_prepare($conn, $add_user_query);
+        mysqli_stmt_bind_param($stmt, "sis", $login, $i, $tytul);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_close($stmt);
+    }
+    
+}
+
 if(isset($_POST['lesson_number']) && isset($_POST['checkbox_value'])) {
     $lessonNumber = $_POST['lesson_number'];
     $isChecked = $_POST['checkbox_value'];
@@ -50,8 +82,84 @@ if(isset($_POST['lesson_number']) && isset($_POST['edited_text'])) {
     saveEditedText($lessonNumber, $editedText, $tytul, $conn);
 }
 
-?>
 
+
+// Pobieramy tytuł kursu przed pętlą while
+$tytul = ""; 
+// Pobranie danych kursów, użytkowników i rodzajów kursów
+$sql = "SELECT * FROM `kursy`, users, rodzaje WHERE users.login=kursy.login AND kursy.tytul=rodzaje.tytul_kursy";
+$result = mysqli_query($conn, $sql);
+
+// Sprawdzenie czy istnieją jakiekolwiek kursy
+if(mysqli_num_rows($result) > 0){
+    // Pętla przez wszystkie wiersze wynikowe
+    while($row = mysqli_fetch_assoc($result)){
+        $tytul = $row['tytul_kursy']; // Pobranie tytułu kursu
+
+        // Sprawdzenie czy zalogowany użytkownik ma dostęp do tego kursu
+        if($login == $row['login']){
+            // Sprawdzamy czy użytkownik ma wpis w tabeli status dla danego kursu
+            if (!checkUserStatus($login, $tytul, $conn)) {
+                // Jeśli nie ma, dodajemy go do tabeli status z 10 lekcjami
+                addUserToStatus($login, $tytul, $conn);
+            }
+            
+            echo "<div id='kursy-container'>";
+            echo "<div id='przyciski'>";
+            echo "<div class='divy'><h1>{$row['tytul_kursy']}</h1></div>";
+            echo "<form action='' method='post'>";
+            // Dodanie checkboxów lekcji z obsługą zdarzenia onchange
+            for ($i = 1; $i <= 10; $i++) {
+                $lesson_number = $i;
+                $status_query = "SELECT status_lekcji FROM status WHERE login = '$login' AND lekcja = $lesson_number AND tytul = '$tytul'";
+                $status_result = mysqli_query($conn, $status_query);
+                $status_row = mysqli_fetch_assoc($status_result);
+                $status = $status_row['status_lekcji'] ?? '0';
+                $button_class = ($status == '1') ? 'button-green' : '';
+                echo "<div>";
+                echo "<label class='checkbox-label' for='checkbox_true_$i'>Zrobione:</label>";
+                echo "<input id='checkbox_true_$i' type='checkbox' name='checkbox_true_$i' value='1' onchange='handleCheckboxChange($lesson_number, true, \"$tytul\", \"{$tytul}_lesson_$lesson_number\")' />";
+                echo "<label class='checkbox-label' for='checkbox_false_$i'>Niezrobione:</label>";
+                echo "<input id='checkbox_false_$i' type='checkbox' name='checkbox_false_$i' value='0' onchange='handleCheckboxChange($lesson_number, false, \"$tytul\", \"{$tytul}_lesson_$lesson_number\")' />";
+                echo "<input type='submit' id='{$tytul}_lesson_$i' name='lesson' value='Lekcja $i' class='divy $button_class' >";
+                echo "</div>";
+            }
+            echo "</form>";
+            echo "</div>";
+            echo "<div id='tresc'>";
+            // Wyświetlenie treści lekcji
+            if(isset($_POST['lesson'])) {
+                $lesson_number = filter_input(INPUT_POST, 'lesson', FILTER_SANITIZE_NUMBER_INT);
+                $lesson_query = "SELECT tresc FROM lekcje WHERE tytul = '{$row['tytul_kursy']}' AND ID_lekcji = $lesson_number";
+                $lesson_result = mysqli_query($conn, $lesson_query);
+                if ($lesson_result) {
+                    $lesson_row = mysqli_fetch_assoc($lesson_result);
+                    if ($lesson_row !== null) {
+                        // Sprawdzenie uprawnień użytkownika
+                        if($_SESSION['upr'] != "pracownik" && $_SESSION['upr'] != "admin"){
+                            echo "<div id='z' contenteditable='false' onBlur='saveEditedContent($lesson_number, \"$tytul\")'><p>{$lesson_row['tresc']}</p></div>";
+                        } else {
+                            echo "<div id='z' contenteditable='true' onBlur='saveEditedContent($lesson_number, \"$tytul\")'><p>{$lesson_row['tresc']}</p></div>";
+                        }
+                        echo "<input type='hidden' name='lesson_number' value='$lesson_number'>"; // Dodanie ukrytego pola z numerem lekcji
+                        echo "<input type='hidden' name='tytul' value='$tytul'>"; // Dodanie ukrytego pola z aktualnym tytułem kursu
+                    } else {
+                        echo "<div id='z'><p>No content available for this lesson.</p></div>";
+                    }
+                } else {
+                    echo "Error retrieving lesson content: " . mysqli_error($conn);
+                }
+            }
+            echo "</div>";
+            echo "</div>";
+        }
+    }
+} else {
+    echo "No courses available.";
+}
+
+mysqli_close($conn);
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -75,85 +183,10 @@ if(isset($_POST['lesson_number']) && isset($_POST['edited_text'])) {
 </head>
 <body>
 
-<div id="baner">
-    <img id="logo" src="logo.png" alt="LANMAX">
 
-    <?php
-    // Include menu
-    include 'menu.php';
-    ?>
-</div>
 
 <div id="kursy">
-    <?php
-    // Pobranie danych kursów, użytkowników i rodzajów kursów
-    $sql = "SELECT * FROM `kursy`, users, rodzaje WHERE users.login=kursy.login AND kursy.tytul=rodzaje.tytul_kursy";
-    $result = mysqli_query($conn, $sql);
 
-    // Sprawdzenie czy istnieją jakiekolwiek kursy
-    if(mysqli_num_rows($result) > 0){
-        // Pętla przez wszystkie wiersze wynikowe
-        while($row = mysqli_fetch_assoc($result)){
-            $tytul = $row['tytul_kursy']; // Pobranie tytułu kursu
-
-            // Sprawdzenie czy zalogowany użytkownik ma dostęp do tego kursu
-            if($login == $row['login']){
-                echo "<div id='kursy-container'>";
-                echo "<div id='przyciski'>";
-                echo "<div class='divy'><h1>{$row['tytul_kursy']}</h1></div>";
-                echo "<form action='' method='post'>";
-                // Dodanie checkboxów lekcji z obsługą zdarzenia onchange
-                for ($i = 1; $i <= 10; $i++) {
-                    $lesson_number = $i;
-                    $status_query = "SELECT status_lekcji FROM status WHERE login = '$login' AND lekcja = $lesson_number AND tytul = '$tytul'";
-                    $status_result = mysqli_query($conn, $status_query);
-                    $status_row = mysqli_fetch_assoc($status_result);
-                    $status = $status_row['status_lekcji'] ?? '0';
-                    $button_class = ($status == '1') ? 'button-green' : '';
-                    echo "<div>";
-                    echo "<label class='checkbox-label' for='checkbox_true_$i'>Zrobione:</label>";
-                    echo "<input id='checkbox_true_$i' type='checkbox' name='checkbox_true_$i' value='1' onchange='handleCheckboxChange($lesson_number, true, \"$tytul\", \"{$tytul}_lesson_$lesson_number\")' />";
-                    echo "<label class='checkbox-label' for='checkbox_false_$i'>Niezrobione:</label>";
-                    echo "<input id='checkbox_false_$i' type='checkbox' name='checkbox_false_$i' value='0' onchange='handleCheckboxChange($lesson_number, false, \"$tytul\", \"{$tytul}_lesson_$lesson_number\")' />";
-                    echo "<input type='submit' id='{$tytul}_lesson_$i' name='lesson' value='Lekcja $i' class='divy $button_class' >";
-                    echo "</div>";
-                }
-                echo "</form>";
-                echo "</div>";
-                echo "<div id='tresc'>";
-                // Wyświetlenie treści lekcji
-                if(isset($_POST['lesson'])) {
-                    $lesson_number = filter_input(INPUT_POST, 'lesson', FILTER_SANITIZE_NUMBER_INT);
-                    $lesson_query = "SELECT tresc FROM lekcje WHERE tytul = '{$row['tytul_kursy']}' AND ID_lekcji = $lesson_number";
-                    $lesson_result = mysqli_query($conn, $lesson_query);
-                    if ($lesson_result) {
-                        $lesson_row = mysqli_fetch_assoc($lesson_result);
-                        if ($lesson_row !== null) {
-                            // Sprawdzenie uprawnień użytkownika
-                            if($_SESSION['upr'] != "pracownik" && $_SESSION['upr'] != "admin"){
-                                echo "<div id='z' contenteditable='false' onBlur='saveEditedContent($lesson_number, \"$tytul\")'><p>{$lesson_row['tresc']}</p></div>";
-                            } else {
-                                echo "<div id='z' contenteditable='true' onBlur='saveEditedContent($lesson_number, \"$tytul\")'><p>{$lesson_row['tresc']}</p></div>";
-                            }
-                            echo "<input type='hidden' name='lesson_number' value='$lesson_number'>"; // Dodanie ukrytego pola z numerem lekcji
-                            echo "<input type='hidden' name='tytul' value='$tytul'>"; // Dodanie ukrytego pola z aktualnym tytułem kursu
-                        } else {
-                            echo "<div id='z'><p>No content available for this lesson.</p></div>";
-                        }
-                    } else {
-                        echo "Error retrieving lesson content: " . mysqli_error($conn);
-                    }
-                }
-                echo "</div>";
-                echo "</div>";
-            }
-        }
-    } else {
-        echo "No courses available.";
-    }
-
-    mysqli_close($conn);
-    ?>
 </div>
 
 <!-- Dodanie kodu JavaScript -->

@@ -273,3 +273,31 @@ input[type="checkbox"] {
 #pra {
   height: 80.35vh;
 }
+
+/* Stylowanie tabeli */
+table {
+  width: 100%;
+  border-collapse: collapse; /* Łączenie granic komórek */
+  margin-top: 20px; /* Margines na górze tabeli */
+}
+
+/* Stylowanie nagłówków tabeli */
+th {
+  background-color: #007bff; /* Kolor tła nagłówka */
+  color: white; /* Kolor tekstu w nagłówku */
+  padding: 10px; /* Wielkość wewnętrznego marginesu w komórce */
+  text-align: center; /* Wyśrodkowanie tekstu w nagłówku */
+  border: 1px solid #ddd; /* Dodanie granicy */
+}
+
+/* Stylowanie komórek tabeli */
+td {
+  padding: 10px; /* Wielkość wewnętrznego marginesu w komórce */
+  text-align: center; /* Wyśrodkowanie tekstu w komórce */
+  border: 1px solid #ddd; /* Dodanie granicy */
+}
+
+/* Stylowanie wierszy na przemian */
+tr:nth-child(even) {
+  background-color: #f2f2f2; /* Kolor tła dla parzystych wierszy */
+}
