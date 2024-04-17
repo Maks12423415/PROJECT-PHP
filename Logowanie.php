@@ -82,7 +82,7 @@ if(isset($_POST["login"]) && isset($_POST["password"])){
 
     <form action="" method="post" >
         <input type="text" placeholder="Wprowadź login..." name="login"><br>
-        <input type="text" placeholder="Wprowadź hasło..." name="password"><br>
+        <input type="password" placeholder="Wprowadź hasło..." name="password"><br>
         <input type="submit" value="Zaloguj">
     </form>
     <div class="error-message"><?php if(isset($_SESSION['komunikat'])){ echo $_SESSION['komunikat']; }; ?></div>

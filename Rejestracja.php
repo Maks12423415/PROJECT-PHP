@@ -68,7 +68,7 @@ if(isset($_POST["login"]) && isset($_POST["password"])){
 <h1>REJESTRACJA</h1>
     <form action="" method="post" id="form">
         <input type="text" placeholder="Wprowadź login..." name="login"><br>
-        <input type="text" placeholder="Wprowadź hasło..." name="password"><br>
+        <input type="password" placeholder="Wprowadź hasło..." name="password"><br>
         <input type="submit"><br>
     </form>
     <div class="error-message"><?php echo isset($_SESSION['blad']) ? $_SESSION['blad'] : ''; ?></div>
